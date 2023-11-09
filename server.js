@@ -1,13 +1,19 @@
 const express = require("express");
-const dotenv = require("dotenv").config();
 const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 10000;
 
 app.use(cors());
+const members = {
+    1: "Anna",
+    2: "Saim",
+    3:"Baki"
+};
+
+// GET request to get all the members in the database
 
 app.get("/", (req, res) => {
-  res.send("<h1>Hello from the server!</h1>");
+  res.send(members);
 });
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
