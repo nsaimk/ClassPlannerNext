@@ -105,12 +105,15 @@ app.get("/auth/redirect", async (req, res) => {
           error: "You can not register as admin",
         });
       }
-      const insertResult = createUser(
+      const insertResult = await createUser(
         userProfile["profile"]["image_original"],
         userProfile["profile"]["first_name"],
         userProfile["profile"]["last_name"],
+        userProfile["profile"]["email"],
         role
       );
+
+      console.log(insertResult)
 
       jwtToken = createToken(insertResult.rows[0]["id"], role);
 
@@ -244,15 +247,13 @@ app.get("/session", async (req, res) => {
         session.time_end,
         'Barath' AS who_leading,
         'London' AS city,
-        session.location,
+        session.meeting_link,
         lesson_content.module AS module_name,
         lesson_content.week_no AS module_week,
         lesson_content.syllabus_link
       FROM session
       JOIN lesson_content
-      ON session.lesson_content_id = lesson_content.id
-      JOIN cohort
-      ON session.cohort_id = cohort.id;
+      ON session.lesson_content_id = lesson_content.id;
     `);
     res.send(result.rows);
   } catch (error) {

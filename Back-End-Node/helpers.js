@@ -4,7 +4,7 @@ const getSignUpDetailsFromDatabase = async (userId, sessionId) => {
   try {
     // Query to select all sign-up details with id from the table
     const query =
-      "SELECT person.slack_firstname, person.slack_lastname, role.name, session.location, attendance.session_id FROM attendance JOIN person ON attendance.person_id = person.id JOIN role ON attendance.role_id = role.id JOIN session ON attendance.session_id = session.id WHERE person.id = $1";
+      "SELECT person.slack_firstname, person.slack_lastname, role.name, session.meeting_link, attendance.session_id FROM attendance JOIN person ON attendance.person_id = person.id JOIN role ON attendance.role_id = role.id JOIN session ON attendance.session_id = session.id WHERE person.id = $1";
     // Execute the query
     const result = await pool.query(query, [userId]);
     // Return the rows from the result
@@ -56,17 +56,11 @@ const updateUser = async (id,firstName, lastName, img) => {
          );
 }
 
-const createUser = async (img, firstName, lastName,role) => {
+const createUser = async (img, firstName, lastName,role, email) => {
   const insertResult = await pool.query(
-    "INSERT INTO person (slack_photo_link, slack_firstname, slack_lastname, slack_email, slack_title) VALUES ($1, $2, $3, $4, $5) RETURNING id"
-  ,
-    [
-      img,
-      firstName,
-      lastName,
-      role,
-    ]
-)
+    "INSERT INTO person (slack_photo_link, slack_firstname, slack_lastname,  slack_title, slack_email) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+    [img, firstName, lastName, email, role]
+  );
     return insertResult
 };
 
