@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # london10-F-project
 1. As a user i want to be able to seee an overview all of all the upcoming classes
 2. as a user i want to be abe to see the next upcoming class including The date it is running, The time it is running, The name of the module and week, A link to the content that will be taught, Who will be leading the class    
@@ -13,3 +14,6 @@
 5. As an Admin I want to be able to see the full name and email addresses of the people signed up to each course
 6. as an admin i want to be able to add new lessons (class)  that volunteers can sign up to
 
+=======
+# ClassPlanner
+>>>>>>> e84b2d325f3e0a0bad4aa0dd68ae2f64906d6ff4
