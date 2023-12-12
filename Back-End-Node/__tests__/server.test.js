@@ -137,7 +137,6 @@ describe("GET /roles", () => {
 
 
 describe("Helper Function Tests", () => {
-  // Assuming userId and sessionId are valid for your database
   const userId = 1;
   const sessionId = 1;
   const role = 1;
@@ -148,10 +147,8 @@ describe("Helper Function Tests", () => {
         .get("/signup-details")
         .set("authorization", "Bearer " + token);
 
-      // Assuming the response body is an array of sign-up details
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBeGreaterThan(0);
-      // Add more specific checks based on your response structure
     });
   });
 
@@ -162,7 +159,6 @@ describe("Helper Function Tests", () => {
         .expect(200)
         .set("authorization", "Bearer " + token);
 
-      // Assuming the response body contains success message or confirmation
       expect(response.body.success).toBe(true);
     });
   });
@@ -178,7 +174,6 @@ describe("Helper Function Tests", () => {
         .expect(200)
         .set("authorization", "Bearer " + token);
 
-      // Assuming the response body contains success message or confirmation
       expect(response.body.success).toBe(true);
     });
   });

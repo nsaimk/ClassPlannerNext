@@ -5,7 +5,9 @@ import Main from "../pages/main";
 import { setupServer } from "msw/node";
 import ClassCard from "../components/classes/ClassCard";
 import SlackLoginButton from "../components/auth-components/SlackLoginButton";
+import SeeAttendancesButton from "../components/classes/SeeAttendancesButton";
 
+jest.mock("../../utils/axios");
 describe("Navbar Component", () => {
   test("should render Navbar component", () => {
     render(<Navbar />);
@@ -208,4 +210,69 @@ describe("ClassCard Component", () => {
     expect(screen.getByText(/Week 1/)).toBeInTheDocument(); // Check if the module week is rendered
 
   });
+});
+
+describe("SeeAttendancesButton Component", () => {
+  const mockProps = {
+    sessionId: 1,
+    whoLeading: "John Doe",
+  };
+
+  const mockAttendances = [
+    {
+      id: 1,
+      slack_firstname: "John",
+      slack_lastname: "Doe",
+      name: "Period 1",
+    },
+    {
+      id: 2,
+      slack_firstname: "Jane",
+      slack_lastname: "Doe",
+      name: "Period 2",
+    },
+  ];
+
+  beforeEach(() => {
+    // Mock axios response for successful attendance fetching
+    axios.get.mockResolvedValue({ status: 200, data: mockAttendances });
+  });
+
+  test("renders SeeAttendancesButton component", () => {
+    render(<SeeAttendancesButton {...mockProps} />);
+    const buttonElement = screen.getByText(/See Attendances/i);
+    expect(buttonElement).toBeInTheDocument();
+  });
+
+  test("clicking the button opens a modal with correct content", async () => {
+    render(<SeeAttendancesButton {...mockProps} />);
+    const buttonElement = screen.getByText(/See Attendances/i);
+
+    fireEvent.click(buttonElement);
+
+    // Wait for the modal to open
+    await waitFor(() => {
+      expect(screen.getByText(/ATTENDANCES/i)).toBeInTheDocument();
+      expect(screen.getByText(/Who is leading: John Doe/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/John Doe ------------------ Period 1/i)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/Jane Doe ------------------ Period 2/i)
+      ).toBeInTheDocument();
+    });
+
+    const mockAxiosGet = axios.get;
+
+    // Mocking the axios.get function
+    axios.get = jest.fn();
+
+    // Simulate a failed attendance fetching
+    axios.get.mockRejectedValueOnce(new Error("Failed to fetch attendance"));
+
+
+    // Reset the mock
+    axios.get = mockAxiosGet;
+  });
+
 });

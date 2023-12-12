@@ -59,7 +59,7 @@ const SeeAttendancesButton = (props) => {
                 </Modal.Body>
                 <Modal.Body>{attendances.map((attendance) => (
                     <div key={attendance.id}>
-                        {attendance.slack_firstname} {attendance.slack_lastname} --------------period?----
+                        {attendance.slack_firstname} {attendance.slack_lastname} ------------------
                         {attendance.name} 
                     </div>
                 ))}</Modal.Body>
