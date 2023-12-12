@@ -6,6 +6,7 @@ import { setupServer } from "msw/node";
 import ClassCard from "../components/classes/ClassCard";
 import SlackLoginButton from "../components/auth-components/SlackLoginButton";
 import SeeAttendancesButton from "../components/classes/SeeAttendancesButton";
+import SignUpLessonButton from "../components/classes/SignUpLessonButton";
 
 jest.mock("../../utils/axios");
 describe("Navbar Component", () => {
@@ -273,6 +274,62 @@ describe("SeeAttendancesButton Component", () => {
 
     // Reset the mock
     axios.get = mockAxiosGet;
+  });
+
+});
+
+describe("SignUpLessonButton Component", () => {
+  const mockProps = {
+    sessionId: 1,
+  };
+
+  const mockRoles = [
+    { id: 1, name: "Role 1" },
+    { id: 2, name: "Role 2" },
+    { id: 3, name: "Role 3" },
+  ];
+
+  beforeEach(() => {
+    // Mock axios response for successful role fetching
+    axios.get.mockResolvedValue({ status: 200, data: mockRoles });
+    // Mock axios response for successful sign-up
+    axios.post.mockResolvedValue({ status: 200, data: "Sign-up successful" });
+  });
+
+  test("renders SignUpLessonButton component", () => {
+    render(<SignUpLessonButton {...mockProps} />);
+    const buttonElement = screen.getByText(/Sign up Lesson/i);
+    expect(buttonElement).toBeInTheDocument();
+  });
+
+  test("clicking the button opens a modal with correct content", async () => {
+    render(<SignUpLessonButton {...mockProps} />);
+    const buttonElement = screen.getByText(/Sign up Lesson/i);
+
+    fireEvent.click(buttonElement);
+
+    // Wait for the modal to open
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Choose a role and sign up/i)
+      ).toBeInTheDocument();
+      expect(screen.getByLabelText(/Role/i)).toBeInTheDocument();
+      expect(screen.getByText(/Role 1/i)).toBeInTheDocument();
+      expect(screen.getByText(/Role 2/i)).toBeInTheDocument();
+      expect(screen.getByText(/Role 3/i)).toBeInTheDocument();
+    });
+
+    const mockAxiosPost = axios.post;
+
+    // Mocking the axios.post function
+    axios.post = jest.fn();
+
+    // Simulate a failed sign-up
+    axios.post.mockRejectedValueOnce(new Error("Failed to sign up"));
+
+
+    // Reset the mocks
+    axios.post = mockAxiosPost;
   });
 
 });
