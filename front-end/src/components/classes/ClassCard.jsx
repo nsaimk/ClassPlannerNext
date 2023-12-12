@@ -3,15 +3,27 @@ import SeeAttendancesButton from './SeeAttendancesButton';
 import SignUpLessonButton from './SignUpLessonButton';
 import "../../styles/ClassCard.scss";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 const formatTime = (timeString) => {
-    const date = new Date(timeString);
+    // Use a default date (e.g., '1970-01-01') along with the provided time
+    const dateString = '1970-01-01';
+    const dateTimeString = `${dateString}T${timeString}`;
+
+    // Create a new Date object with the combined date and time
+    const date = new Date(dateTimeString);
+
+    // Format the time
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
+
     return `${hours}:${minutes}`;
 };
 
+
+
 const ClassCard = (props) => {
+
+    console.log("props.time_start:", props.time_start);
+    console.log("props.time_end:", props.time_end);
     return (
         <div className="blog-slider">
             <div className="blog-slider__item">

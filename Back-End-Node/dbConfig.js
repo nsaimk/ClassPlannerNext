@@ -11,7 +11,6 @@ const pool = new Pool({
   },
 });
 
-
 //DB is connected, below is to see what tables are in the DB
 const query = `
   SELECT table_name
@@ -24,10 +23,10 @@ pool.query(query, (err, result) => {
   if (err) {
     console.error("Error executing query:", err);
   } else {
-    console.log("Tables in the database:");
-    result.rows.forEach((row) => {
-      console.log(row.table_name);
-    });
+    //console.log("Tables in the database:");
+    // result.rows.forEach((row) => {
+    //   console.log(row.table_name);
+    // });
   }
 });
 

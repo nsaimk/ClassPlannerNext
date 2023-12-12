@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 const frontendUrl = process.env.FRONT_END_URL;
 const verifyToken = require("./verifyToken");
 const verifyAdminToken = require("./verifyAdminToken.js");
-const reminderEmail = require('./reminder');
+const reminderEmail = require("./reminder");
 
 const {
   getSignUpDetailsFromDatabase,
@@ -25,7 +25,7 @@ const {
 app.use(cors());
 app.use(express.json());
 require("dotenv").config();
-app.use('/api', reminderEmail); //reminder email
+app.use("/api", reminderEmail); //reminder email
 
 const client_id = process.env.VITE_SLACK_CLIENT_ID;
 const client_secret = process.env.SLACK_CLIENT_SECRET;
@@ -90,7 +90,10 @@ app.get("/auth/redirect", async (req, res) => {
         role !== "admin"
       ) {
         updateTitle(existingUser.rows[0]["id"], role);
-      } else if (role == "admin" && existingUser.rows[0]["slack_title"] !== "admin") {
+      } else if (
+        role == "admin" &&
+        existingUser.rows[0]["slack_title"] !== "admin"
+      ) {
         res
           .status(401)
           .json({ error: "You can not change your role as admin" });
@@ -109,11 +112,9 @@ app.get("/auth/redirect", async (req, res) => {
         userProfile["profile"]["image_original"],
         userProfile["profile"]["first_name"],
         userProfile["profile"]["last_name"],
-        userProfile["profile"]["email"],
-        role
+        role,
+        userProfile["profile"]["email"]
       );
-
-      console.log(insertResult)
 
       jwtToken = createToken(insertResult.rows[0]["id"], role);
 
@@ -130,19 +131,22 @@ const options = {
   key: fs.readFileSync(`${__dirname}/client-key.pem`),
   cert: fs.readFileSync(`${__dirname}/client-cert.pem`),
 };
-if (process.env.LOCAL_DEVELOPMENT) {
-  // Slack requires https for OAuth, but locally we want to use http
-  // to avoid having to maintain our own certificates
-  https.createServer(options, app).listen(443);
-  http.createServer(app).listen(10000);
-} else {
-  // when we deploy on Vercel, Vercel adds HTTPS for us, so we can just use one port
-  //console.log("PRODUCT");
-  https.createServer(options, app).listen(10000);
-}
 
-//cities
-app.get("/cities", async (req, res) => {
+https.createServer(options, app).listen(443);
+
+// if (process.env.LOCAL_DEVELOPMENT) {
+//   // Slack requires https for OAuth, but locally we want to use http
+//   // to avoid having to maintain our own certificates
+//   https.createServer(options, app).listen(443);
+//   http.createServer(app).listen(10000);
+// } else {
+//   // when we deploy on Vercel, Vercel adds HTTPS for us, so we can just use one port
+//   //console.log("PRODUCT");
+//   https.createServer(options, app).listen(10000);
+// }
+
+// //cities
+app.get("/cities", verifyToken, async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM region");
     res.send(result.rows);
@@ -151,7 +155,6 @@ app.get("/cities", async (req, res) => {
     console.error("Error executing query:", error);
   }
 });
-
 
 //Profile endpoint
 app.get("/profile", verifyToken, async (req, res) => {
@@ -220,14 +223,14 @@ app.post("/insert-signup", verifyToken, async (req, res) => {
     const sessionId = req.body.sessionId;
     const userId = req.userId;
     const role = req.body.role;
-    
-    await insertSignUp(sessionId, role, userId);
-    try {  // email service
-      await reminderEmail(userId, sessionId);
 
+    await insertSignUp(sessionId, role, userId);
+    try {
+      // email service
+      await reminderEmail(userId, sessionId);
     } catch (error) {
-      console.error('Error sending reminder email:', error);
-      res.status(500).json({ error: 'Something went wrong.' });
+      console.error("Error sending reminder email:", error);
+      res.status(500).json({ error: "Something went wrong." });
     }
     res.json({ success: true });
   } catch (error) {
@@ -245,8 +248,8 @@ app.get("/session", async (req, res) => {
         session.date,
         session.time_start,
         session.time_end,
-        'Barath' AS who_leading,
-        'London' AS city,
+        'Mentor' AS who_leading,
+        'UK' AS city,
         session.meeting_link,
         lesson_content.module AS module_name,
         lesson_content.week_no AS module_week,

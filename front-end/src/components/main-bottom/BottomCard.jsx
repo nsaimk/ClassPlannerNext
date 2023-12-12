@@ -10,11 +10,11 @@ export default function BottomCard(props) {
 
     const cardStyle = {
         width: 260,
-        height: 240, // Kartın toplam yüksekliğini belirtin
+        height: 240, 
         borderRadius: "10px",
-        overflow: "hidden", // Kartın içeriğini sınırlamak için
-        transition: "transform 0.3s, box-shadow 0.3s", // Büyüme ve gölgelendirme için geçiş efekti
-        boxShadow: hovered ? "0px 0px 10px 2px rgba(0, 0, 0, 0.5)" : "0px 0px 5px 1px rgba(0, 0, 0, 0.2)", // Değişiklik
+        overflow: "hidden", 
+        transition: "transform 0.3s, box-shadow 0.3s", 
+        boxShadow: hovered ? "0px 0px 10px 2px rgba(0, 0, 0, 0.5)" : "0px 0px 5px 1px rgba(0, 0, 0, 0.2)", 
         transform: hovered ? "scale(1.05)" : "scale(1)",
     };
 

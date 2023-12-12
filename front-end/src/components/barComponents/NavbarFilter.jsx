@@ -6,6 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import axios from '../../utils/axios';
+import { useAuthContext } from "../../auth/useAutContext";
 
 const ITEM_HEIGHT = 78;
 const ITEM_PADDING_TOP = 8;
@@ -21,34 +23,42 @@ const MenuProps = {
 export default function MultipleSelectCheckmarks() {
     const [selectedCities, setSelectedCities] = useState([]);
     const [cityData, setCityData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { isAuthenticated } = useAuthContext();
 
     useEffect(() => {
-        // Simulate fetching data from the database
         const fetchData = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/cities`);
+                setLoading(true); // Set loading to true when starting the fetch
 
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                const response = await axios.get("/cities");
+
+                if (response.statusText !== "OK") {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
-                const data = await response.json();
-                setCityData(data);
+                const dataCity = response.data;
+                setCityData(dataCity);
+                setError(null);
             } catch (error) {
-                console.error('Error fetching city data:', error.message);
+                console.error("Error fetching city data:", error);
+                setError("Error fetching city data. Please try again later.");
+            } finally {
+                setLoading(false); // Set loading to false regardless of success or failure
             }
         };
 
-        fetchData(); // Call the fetchData function
-
-    }, []); // Empty dependency array ensures the effect runs once when the component mounts
+        if (isAuthenticated) {
+            fetchData();
+        }
+    }, [isAuthenticated]);
 
     const handleChange = (event) => {
         const {
             target: { value },
         } = event;
         setSelectedCities(
-            // On autofill, we get a stringified value.
             typeof value === 'string' ? value.split(',') : value
         );
     };
@@ -69,12 +79,15 @@ export default function MultipleSelectCheckmarks() {
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
                 >
-                    {cityData.map((city) => (
-                        <MenuItem key={city.id} value={city.name}>
-                            <Checkbox checked={selectedCities.indexOf(city.name) > -1} />
-                            <ListItemText primary={city.name} />
-                        </MenuItem>
-                    ))}
+                    {loading && <MenuItem disabled>Loading...</MenuItem>}
+                    {error && <MenuItem disabled>Error: {error}</MenuItem>}
+                    {!loading &&
+                        cityData.map((city) => (
+                            <MenuItem key={city.id} value={city.name}>
+                                <Checkbox checked={selectedCities.indexOf(city.name) > -1} />
+                                <ListItemText primary={city.name} />
+                            </MenuItem>
+                        ))}
                 </Select>
             </FormControl>
         </div>

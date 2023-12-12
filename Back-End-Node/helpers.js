@@ -59,7 +59,7 @@ const updateUser = async (id,firstName, lastName, img) => {
 const createUser = async (img, firstName, lastName,role, email) => {
   const insertResult = await pool.query(
     "INSERT INTO person (slack_photo_link, slack_firstname, slack_lastname,  slack_title, slack_email) VALUES ($1, $2, $3, $4, $5) RETURNING id",
-    [img, firstName, lastName, email, role]
+    [img, firstName, lastName, role,email]
   );
     return insertResult
 };
