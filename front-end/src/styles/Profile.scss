@@ -10,13 +10,14 @@
     border-radius: 30px;
     padding: 10px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-    width: 70%;
-    height: 480px;
+    width: 90%;
+    height: 650px;
     background: #9da9ad;
     margin: auto;
     margin-top: 10px;
     color: #36454f;
     margin-top: 190px;
+    margin-bottom: 40px;
 }
 
 .left-container {
@@ -49,9 +50,10 @@
 @media only screen and (max-width: 1200px) {
     .profile-details {
         flex-direction: column;
-        margin: 10px;
         height: auto;
         width: 90%;
+        margin-top: 180px;
+        align-items: center;
     }
 
     .left-container {
@@ -78,6 +80,8 @@
     .profile-details {
         flex-direction: column;
         margin: 10px;
+        margin-top: 150px;
+    
     }
 
     .left-container {
@@ -143,32 +147,37 @@ td:first-child {
 
 // registered classes
 .registered-classes-container {
-  display: flex;
-  flex-direction: column;  /* Display items in a column */
-  overflow-y: auto;  /* Enable vertical scrollbar */
-  max-height: 370px;  /* Set a maximum height for the container */
+    display: flex;
+    flex-direction: column;
+    /* Display items in a column */
+    overflow-y: auto;
+    /* Enable vertical scrollbar */
+    max-height: 370px;
+    /* Set a maximum height for the container */
 }
 
 .registered-classes {
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  transition: transform 0.5s ease;  /* Add transition for a smooth slide effect */
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    transition: transform 0.5s ease;
+    /* Add transition for a smooth slide effect */
 }
 
 .registered-classes:hover {
-  transform: translateX(10px);  /* Adjust the value based on your preference */
+    transform: translateX(10px);
+    /* Adjust the value based on your preference */
 }
 
 /* Optionally customize the appearance of the scrollbar */
 .registered-classes-container::-webkit-scrollbar {
-  width: 12px;
+    width: 12px;
 }
 
 .registered-classes-container::-webkit-scrollbar-thumb {
-  background-color: #888;
+    background-color: #888;
 }
 
 .registered-classes-container::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
+    background-color: #f1f1f1;
 }

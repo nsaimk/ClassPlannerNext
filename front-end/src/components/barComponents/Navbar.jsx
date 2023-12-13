@@ -89,7 +89,7 @@ const Navbar = () => {
                     '@media screen and (max-width: 1000px)': {
                         minHeight: '70px',
                         height: 'auto',
-                        marginTop: '140px',
+                    
                     },
                 }}
             >
