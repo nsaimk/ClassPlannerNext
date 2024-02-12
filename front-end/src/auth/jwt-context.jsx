@@ -118,7 +118,6 @@ export function AuthProvider({ children }) {
     // LOGIN
     const login = async (email, password) => {
 
-
     };
 
     // LOGIN

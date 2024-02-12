@@ -64,6 +64,6 @@
     "jest-environment-jsdom": "^29.7.0",
     "msw": "^2.0.11",
     "sass": "^1.69.5",
-    "sass-loader": "^13.3.2"  }
-
+    "sass-loader": "^13.3.2"
+  }
 }

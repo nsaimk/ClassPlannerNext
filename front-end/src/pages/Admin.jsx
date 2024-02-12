@@ -1,5 +1,4 @@
 import * as React from 'react';
-//import CityCohort from "../components/filters/CityCohort"
 
 
 const Admin = () => {
